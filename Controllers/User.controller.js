@@ -16,7 +16,7 @@ export function register(req, res) {
             username: req.body.username,
             password: hashedPassword,
             mail: req.body.mail,
-            image: `${req.body.image}`,
+            image: `${req.protocol}://${req.get('host')}/img/${req.body.image}`,
             role: req.body.role
         })
         user
