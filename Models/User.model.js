@@ -1,27 +1,43 @@
 import mongoose, { mongo } from 'mongoose';
-const { Schema, model} = mongoose
+const { Schema, model } = mongoose
 
 const userSchema = new Schema(
     {
         username: {
             type: String,
-            required: true,
+            minlength: 4,
+            maxlength: 200,
+            required: [true, "Username Required"]
         },
-        password : {
+        password: {
             type: String,
-            required: true
+            required: [true, "Password Required"],
         },
-        mail : {
+        mail: {
             type: String,
-            required: true
+            validate: {
+                validator: async function (mail) {
+                    const user = await this.constructor.findOne({ mail });
+                    if (user) {
+                        if (this.id === user.id) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return true;
+                },
+                message: props => 'The specified email address is already in use.'
+            },
+            required: [true, 'User email required']
         },
-        image : {
+        image: {
             type: String,
-            required: true
+            required: [true, 'Image required']
         },
-        role : {
+        role: {
             type: String,
-            required: true
+            required: [true, 'Role required'],
+            enum: ["Admin", "User"]
         }
     },
     {
@@ -29,4 +45,4 @@ const userSchema = new Schema(
     }
 );
 
-export default model ("user", userSchema)
+export default model("user", userSchema)

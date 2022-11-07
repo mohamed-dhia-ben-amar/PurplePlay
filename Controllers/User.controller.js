@@ -19,6 +19,9 @@ export function register(req, res) {
             image: `${req.protocol}://${req.get('host')}/img/${req.body.image}`,
             role: req.body.role
         })
+
+        if(req.body.password === req.body.confirmpassword) {
+
         user
             .save()
             .then(user => {
@@ -30,7 +33,9 @@ export function register(req, res) {
                 res.json({
                     error: err
                 })
-            })
+            })} else {
+                res.json({err : "Passwords Dont Mach"})
+            }
     })
 }
 
