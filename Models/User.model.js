@@ -38,6 +38,9 @@ const userSchema = new Schema(
             type: String,
             required: [true, 'Role required'],
             enum: ["Admin", "User"]
+        },
+        verified: {
+            type: Boolean
         }
     },
     {
